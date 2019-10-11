@@ -1,6 +1,6 @@
 ################################################################################
 #
-# xNNs_Code_030_CIFAR_ResNetV2.py
+# xNNs_Code_030_CIFAR_MobileNetV2.py
 #
 # DESCRIPTION
 #
@@ -17,7 +17,7 @@
 # NOTES
 #
 #    1. This configuration achieves 91.6% accuracy in 60 epochs with each epoch
-#       taking ~ 135s on Google Colab.  Accuracy can be improved via
+#         Accuracy can be improved via
 #       - Improved training data augmentation
 #       - Improved network design
 #       - Improved network training
@@ -175,20 +175,6 @@ def create_model(rows, cols, channels, level_0_blocks, level_1_blocks, level_2_b
   x = keras.layers.BatchNormalization(axis=-1, momentum=TRAINING_BN_MOMENTUM, epsilon=TRAINING_BN_EPSILON, center=True, scale=True)(x)
   x = keras.layers.ReLU()(x)
 
-
-
-  # encoder - level 0 - special bottleneck - repeat 1x
-  # input
-  #    tensor: 28 x 28 x 32
-  # residual path
-  #    filter: 16 x 1 x 1 x 16
-  #    filter: 16 x 3 x 3 x 16
-  #    filter: 64 x 1 x 1 x 16
-  # main path
-  #    filter: 64 x 1 x 1 x 16
-  # output
-  #    tensor: 28 x 28 x 64
-
   # Bottleneck 1
   residual = keras.layers.Conv2D(32, 1, strides=1, padding='same', activation=None, use_bias=False)(x)
   residual = keras.layers.BatchNormalization(axis=-1, momentum=TRAINING_BN_MOMENTUM, epsilon=TRAINING_BN_EPSILON, center=True, scale=True)(residual)
@@ -272,8 +258,6 @@ def create_model(rows, cols, channels, level_0_blocks, level_1_blocks, level_2_b
     residual = keras.layers.ReLU()(residual)
 
     x        = keras.layers.Add()([x, residual])
-
-
 
 
   x = keras.layers.Conv2D(320, 1, strides=1, padding='same', activation=None, use_bias=False)(x)

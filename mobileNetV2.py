@@ -114,6 +114,7 @@ def pre_processing_train(example):
   
     # image is cast to float32, normalized, augmented and random cropped
     # label is cast to int32
+    # Data augmentation using random flip and random crop
     image = tf.math.divide(tf.math.subtract(tf.dtypes.cast(image, tf.float32), DATA_MEAN), DATA_STD_DEV)
     image = tf.image.random_flip_left_right(image)
     image = tf.image.random_crop(image, size=[DATA_CROP_ROWS, DATA_CROP_COLS, 3])
@@ -259,6 +260,7 @@ def create_model(rows, cols, channels, level_0_blocks, level_1_blocks, level_2_b
 
     x        = keras.layers.Add()([x, residual])
 
+  ######################################### Bottleneck 4 X 4 ends 
 
   x = keras.layers.Conv2D(320, 1, strides=1, padding='same', activation=None, use_bias=False)(x)
   x = keras.layers.BatchNormalization(axis=-1, momentum=TRAINING_BN_MOMENTUM, epsilon=TRAINING_BN_EPSILON, center=True, scale=True)(x)
